@@ -25,24 +25,24 @@ const reefData = {
                   "reefImpact": 35, // numeric percent
                   "fishPopulationImpactMin": 20, 
                   "fishPopulationImpactMax": 30,
-                  "displayReefHealth": "+35",
+                  "displayReefHealth": "+ 35",
                   "displayFishPopulation": "+ 20-30%"
                 },
                 { 
                   "title": "Community-Led Catch Limits",
                   "description": "<br>You collaborate with local fishers to limit the size and number of reef fish caught", 
                   "reefImpact": 10, 
-                  "fishPopulationImpact": -10, 
-                  "displayReefHealth": "+ 10",
-                  "displayFishPopulation": "- 10%"
+                  "fishPopulationImpact": -20, 
+                  "displayReefHealth": "+ 12",
+                  "displayFishPopulation": "- 20%"
                 },
                 { 
                   "title": "Education & Monitoring First", 
                   "description": "<br>You start community workshops and reef surveys without changing fishing rules", 
-                  "reefImpact": 10, 
-                  "fishPopulationImpact": -30, 
-                  "displayReefHealth": "- 20",
-                  "displayFishPopulation": "- 30%"
+                  "reefImpact": 20, 
+                  "fishPopulationImpact": -40, 
+                  "displayReefHealth": "- 25",
+                  "displayFishPopulation": "- 40%"
                 }
               ],
        
@@ -106,18 +106,18 @@ const reefData = {
               { "title": "Night OverFishing Ban", "description": "You will enact a full ban on nighttime spearfishing within designated reef zones of Maunalua Bay.", 
                "reefImpact": 85, 
                "fishPopulationImpact": 70, 
-               "displayReefHealth": "+ 8",
+               "displayReefHealth": "+ 15",
                "displayFishPopulation": "+ 65%" },
               { "title": "Predator Species Hatchery Restocking", "description": "You would establish a hatchery initiative focused on breeding and releasing native predator species into Maunalua Bay.", 
               "reefImpact": 65, 
                "fishPopulationImpact": 90, 
-               "displayReefHealth": "+ 7",
+               "displayReefHealth": "+ 10",
                "displayFishPopulation": "+ 75%" },
               { "title": "Community-Led Monitoring", "description": "You would enact a policy that empowers local fishers, students, and cultural practitioners to monitor reef health and enforce seasonal fishing closures", 
               "reefImpact": 15, 
                "fishPopulationImpact": 60, 
                "displayReefHealth": "- 20",
-               "displayFishPopulation": "- 10%" }
+               "displayFishPopulation": "- 20%" }
             ],
        
             "stroke": "#e17f2a",
