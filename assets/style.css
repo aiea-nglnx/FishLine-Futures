@@ -156,6 +156,24 @@ body {
   z-index: 1;
 }
 
+.props-name {
+  flex: 1;
+  margin-top:   10px;
+  font-size: 1rem;
+  margin: 0;
+  font-family: Alfa Slab One;
+  font-weight: bolder;
+  letter-spacing: 1.2px;
+  color: #483D3F;
+}
+
+.props-dilemma {
+    font-family: Barlow Semi Condensed;
+  font-weight: 500;
+  color: #483D3F;
+  font-size: 0.95rem;
+}
+
 #dilemma-panel {
   display: none;
   position: absolute;
@@ -198,6 +216,22 @@ body {
   color: #483D3F;
 }
 
+.actionBtn {
+  background: #675A51;
+  color: #FAF7EF;
+  border: none;
+  border-radius: 6px;
+  box-shadow: 2px 2px 8px #675A51;
+  padding: 08px 32px;
+  font-size: 1rem;
+  margin-top: 03px;
+  cursor: pointer;
+  font-family: Barlow Semi Condensed;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.5px
+} 
+
 .close-btn {
   font-size: 2rem;
   background: #675A51;
@@ -206,8 +240,8 @@ body {
   border-radius: 5px;
   padding: 3px 10px;
   font-weight: bolder;
-  
 }
+
 .choices {
   display: flex;
   gap: 50px;
@@ -228,7 +262,7 @@ body {
   font-family: Barlow Semi Condensed;
   text-transform: uppercase;
   font-weight: 1000;
-  font-size: 1.22rem;
+  font-size: 1.35rem;
   color: #483D3F;
 }
 
@@ -236,6 +270,7 @@ body {
   font-family: Barlow Semi Condensed;
   font-weight: 400;
   color: #483D3F;
+  font-size: 1.22rem;
 }
 
 .authorize-btn {
@@ -294,6 +329,13 @@ body {
   color: #483D3F;
 }
 
+.summary-body .summary-text {
+    font-family: Barlow Semi Condensed;
+  font-weight: 500;
+  color: #483D3F;
+  font-size: 1.22rem;
+}
+
 .nxtDilemmaBtn {
   background: #456492;
   color: #FAF7EF;
@@ -307,7 +349,39 @@ body {
   font-family: Barlow Semi Condensed;
   text-transform: uppercase;
   font-weight: 700;
-  letter-spacing: 0.5px
+  letter-spacing: 0.5px;
+}
+
+.optionsBtn {
+  background: #456492;
+  color: #FAF7EF;
+  border: none;
+  border-radius: 6px;
+  box-shadow: 2px 2px 8px #675A51;
+  padding: 10px 25px;
+  font-size: 1.1rem;
+  margin-top: 18px;
+  cursor: pointer;
+  font-family: Barlow Semi Condensed;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.autoBtn {
+  background: #456492;
+  color: #FAF7EF;
+  border: none;
+  border-radius: 6px;
+  box-shadow: 2px 2px 8px #675A51;
+  padding: 10px 25px;
+  font-size: 1.1rem;
+  margin-top: 18px;
+  cursor: pointer;
+  font-family: Barlow Semi Condensed;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.5px;
 }
 
 hr {
