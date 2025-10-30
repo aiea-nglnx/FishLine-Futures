@@ -160,8 +160,8 @@ function reefHealthColorChange(score) {
   // 04 >= score <= 6 orange (moderate)
   // score < 04 => red (worsened)
 
-  if (score >= 8) return { color: "2ECC71", label: "Improved" }; // Good
-  if (score <= 3) return { color: "#E43825", label: "Worsened" }; // Severe
+  if (score >= 7) return { color: "2ECC71", label: "Improved" }; // Good
+  if (score <= 4) return { color: "#E43825", label: "Worsened" }; // Severe
   return { color: "#F19955", label: "Moderate" }; // Moderate
 }
 
