@@ -101,7 +101,7 @@ const reefData = {
       "type": "Feature",
       "properties": {
             "name": "Maunalua Beach Bay",
-            "dilemma": "OH NO!<br><br> Overfishing of nocturnal reef predators—especially through unregulated night spearfishing—has led to a sharp decline in species like taʻape, menpachi, and kūmū. These predators once kept invertebrate populations in check. Without them, small crustaceans and bioeroding species have surged, destabilizing coral structures from within.",
+            "dilemma": "<br><br>OH NO!<br><br> Overfishing of nocturnal reef predators—especially through unregulated night spearfishing—has led to a sharp decline in species like taʻape, menpachi, and kūmū. These predators once kept invertebrate populations in check.<br><br>Without them, small crustaceans and bioeroding species have surged, destabilizing coral structures from within.",
             "choices": [
               { "title": "Night OverFishing Ban", "description": "You will enact a full ban on nighttime spearfishing within designated reef zones of Maunalua Bay.", 
                "reefImpact": 85, 
@@ -147,7 +147,7 @@ function effectiveness(choice, { jitterRange = 0.4, deterministic = false } = {}
     case "-":  bias = -0.5;break;
     case "--": bias = -0.8;break;
     default:   bias = 0;   break;
-  }
+  } 
 
   // Results change each play
   const jitter = deterministic ? 0 : (Math.random() * (jitterRange * 2) - jitterRange);
@@ -210,7 +210,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
                 // Popup Setup
-                const popupContent = `<strong>${props.name || ""}</strong><br>${props.dilemma || ""}<br><br><button onclick="openDilemmaPanel(${dilemmaIndex})">Take Action</button>`;
+                const popupContent = `<div class="props-name"><strong>${props.name || ""}</strong></div><div class="props-dilemma"><br>${props.dilemma || ""}</div><br><br><button class="actionBtn" onclick="openDilemmaPanel(${dilemmaIndex})">Take Action</button>`;
                 layer.bindPopup(popupContent);
 
                 layer.on({
@@ -301,8 +301,6 @@ function showDilemmaSummary(dilemmaIndex) {
   const props = feature.properties || {};
 
   // Short excerpt from the dilemma text (trim to e.g. 240 chars)
-  const excerpt = props.dilemma ? (props.dilemma.length > 240 ? props.dilemma.substring(0,240) + '…' : props.dilemma) : '';
-
   const panel = document.getElementById('dilemma-panel');
   panel.innerHTML = `
     <div class="decision-header">
@@ -310,10 +308,10 @@ function showDilemmaSummary(dilemmaIndex) {
       <h2>${props.name || ''}</h2>
     </div>
     <div class="summary-body">
-      <div class="summary-text">${excerpt}</div>
+      <div class="summary-text">${props.dilemma}</div>
       <div style="margin-top:12px;">
-        <button onclick="showDilemmaPanel(${dilemmaIndex})">View Options</button>
-        <button onclick="handleChoice(0)" style="margin-left:8px;">Auto-Authorize First Option</button>
+        <button class="optionsBtn" onclick="showDilemmaPanel(${dilemmaIndex})">View Options</button>
+        <button class="autoBtn" onclick="handleChoice(0)" style="margin-left:8px;">Auto-Authorize First Option</button>
       </div>
     </div>
   `;
