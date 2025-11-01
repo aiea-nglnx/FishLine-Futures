@@ -25,15 +25,15 @@ const reefData = {
                   "reefImpact": 35, // numeric percent
                   "fishPopulationImpactMin": 20, 
                   "fishPopulationImpactMax": 30,
-                  "displayReefHealth": "35",
-                  "displayFishPopulation": "20-30%"
+                  "displayReefHealth": "+ 35",
+                  "displayFishPopulation": "+ 20-30%"
                 },
                 { 
                   "title": "Community-Led Catch Limits",
                   "description": "<br>You collaborate with local fishers to limit the size and number of reef fish caught", 
                   "reefImpact": 10, 
                   "fishPopulationImpact": -20, 
-                  "displayReefHealth": "12",
+                  "displayReefHealth": "+ 12",
                   "displayFishPopulation": "-20%"
                 },
                 { 
@@ -106,12 +106,12 @@ const reefData = {
               { "title": "Night OverFishing Ban", "description": "You will enact a full ban on nighttime spearfishing within designated reef zones of Maunalua Bay.", 
                "reefImpact": 85, 
                "fishPopulationImpact": 70, 
-               "displayReefHealth": "15",
-               "displayFishPopulation": "65%" },
+               "displayReefHealth": "+ 15",
+               "displayFishPopulation": "+ 65%" },
               { "title": "Predator Species Hatchery Restocking", "description": "You would establish a hatchery initiative focused on breeding and releasing native predator species into Maunalua Bay.", 
               "reefImpact": 65, 
                "fishPopulationImpact": 90, 
-               "displayReefHealth": "10",
+               "displayReefHealth": "+ 10",
                "displayFishPopulation": "75%" },
               { "title": "Community-Led Monitoring", "description": "You would enact a policy that empowers local fishers, students, and cultural practitioners to monitor reef health and enforce seasonal fishing closures", 
               "reefImpact": 15, 
@@ -135,20 +135,20 @@ const featureLayers = [];
 
 
 // Computer effectiveness score
-function effectiveness(choice, { jitterRange = 0.2, deterministic = false } = {}) {
+function effectiveness(choice, { jitterRange = 0.4, deterministic = false } = {}) {
   if (!choice) return 0; // No input
+
+  // 1) textual reefHealth markers (existing behavior)
   const rh = String(choice.reefHealth || "").trim();
-
-  let bias = 0;
+  let textBias = 0;
   switch (rh) {
-    case "++": bias = 0.8; break;
-    case "+":  bias = 0.5; break;
-    case "+-": bias = 0;   break;
-    case "-":  bias = -0.5;break;
-    case "--": bias = -0.8;break;
-    default:   bias = 0;   break;
+    case "++": textBias = 0.8; break;
+    case "+":  textBias = 0.5; break;
+    case "+-": textBias = 0;   break;
+    case "-":  textBias = -0.5;break;
+    case "--": textBias = -0.8;break;
+    default:   textBias = 0;   break;
   } 
-
 
   // 2) derive numeric bias from provided numeric effects where available.
   // Convert percent values into -1..1 range
@@ -203,7 +203,6 @@ function reefHealthColorChange(score) {
   if (score >= 7) return { color: "2ECC71", label: "Improved" }; // Good
   if (score <= 4) return { color: "#E43825", label: "Worsened" }; // Severe
   return { color: "#F19955", label: "Moderate" }; // Moderate
-  
 }
 
 document.addEventListener("DOMContentLoaded", function () {
