@@ -25,24 +25,24 @@ const reefData = {
                   "reefImpact": 35, // numeric percent
                   "fishPopulationImpactMin": 20, 
                   "fishPopulationImpactMax": 30,
-                  "displayReefHealth": "+35",
+                  "displayReefHealth": "+ 35",
                   "displayFishPopulation": "+ 20-30%"
                 },
                 { 
                   "title": "Community-Led Catch Limits",
                   "description": "<br>You collaborate with local fishers to limit the size and number of reef fish caught", 
                   "reefImpact": 10, 
-                  "fishPopulationImpact": -10, 
-                  "displayReefHealth": "+ 10",
-                  "displayFishPopulation": "- 10%"
+                  "fishPopulationImpact": -20, 
+                  "displayReefHealth": "+ 12",
+                  "displayFishPopulation": "-20%"
                 },
                 { 
                   "title": "Education & Monitoring First", 
                   "description": "<br>You start community workshops and reef surveys without changing fishing rules", 
-                  "reefImpact": 10, 
-                  "fishPopulationImpact": -30, 
-                  "displayReefHealth": "- 20",
-                  "displayFishPopulation": "- 30%"
+                  "reefImpact": 20, 
+                  "fishPopulationImpact": -40, 
+                  "displayReefHealth": "-25",
+                  "displayFishPopulation": "-40%"
                 }
               ],
        
@@ -106,18 +106,18 @@ const reefData = {
               { "title": "Night OverFishing Ban", "description": "You will enact a full ban on nighttime spearfishing within designated reef zones of Maunalua Bay.", 
                "reefImpact": 85, 
                "fishPopulationImpact": 70, 
-               "displayReefHealth": "+ 8",
+               "displayReefHealth": "+ 15",
                "displayFishPopulation": "+ 65%" },
               { "title": "Predator Species Hatchery Restocking", "description": "You would establish a hatchery initiative focused on breeding and releasing native predator species into Maunalua Bay.", 
               "reefImpact": 65, 
                "fishPopulationImpact": 90, 
-               "displayReefHealth": "+ 7",
-               "displayFishPopulation": "+ 75%" },
+               "displayReefHealth": "+ 10",
+               "displayFishPopulation": "75%" },
               { "title": "Community-Led Monitoring", "description": "You would enact a policy that empowers local fishers, students, and cultural practitioners to monitor reef health and enforce seasonal fishing closures", 
               "reefImpact": 15, 
                "fishPopulationImpact": 60, 
-               "displayReefHealth": "- 20",
-               "displayFishPopulation": "- 10%" }
+               "displayReefHealth": "-20",
+               "displayFishPopulation": "-20%" }
             ],
        
             "stroke": "#e17f2a",
@@ -137,21 +137,61 @@ const featureLayers = [];
 // Computer effectiveness score
 function effectiveness(choice, { jitterRange = 0.4, deterministic = false } = {}) {
   if (!choice) return 0; // No input
-  const rh = String(choice.reefHealth || "").trim();
 
-  let bias = 0;
+  // 1) textual reefHealth markers (existing behavior)
+  const rh = String(choice.reefHealth || "").trim();
+  let textBias = 0;
   switch (rh) {
-    case "++": bias = 0.8; break;
-    case "+":  bias = 0.5; break;
-    case "+-": bias = 0;   break;
-    case "-":  bias = -0.5;break;
-    case "--": bias = -0.8;break;
-    default:   bias = 0;   break;
+    case "++": textBias = 0.8; break;
+    case "+":  textBias = 0.5; break;
+    case "+-": textBias = 0;   break;
+    case "-":  textBias = -0.5;break;
+    case "--": textBias = -0.8;break;
+    default:   textBias = 0;   break;
   } 
 
-  // Results change each play
-  const jitter = deterministic ? 0 : (Math.random() * (jitterRange * 2) - jitterRange);
-  const score = Math.max(-1, Math.min(1, bias + jitter));
+  // 2) derive numeric bias from provided numeric effects where available.
+  // Convert percent values into -1..1 range
+  let numericBias = 0;
+  if (typeof choice.reefImpact === 'number') {
+    numericBias += Math.max(-100, Math.min(100, choice.reefImpact)) / 100;
+  } else if (typeof choice.displayReefHealth === 'string') {
+    const m = String(choice.displayReefHealth).match(/(-?\d+(\.\d+)?)/);
+    if (m) numericBias += Math.max(-100, Math.min(100, parseFloat(m[0]))) / 100;
+  }
+
+  // fish midpoint handling (smaller influence)
+  let fishMid;
+  if (typeof choice.fishPopulationImpactMin === 'number' && typeof choice.fishPopulationImpactMax === 'number') {
+    fishMid = (choice.fishPopulationImpactMin + choice.fishPopulationImpactMax) / 2;
+  } else if (typeof choice.fishPopulationImpact === 'number') {
+    fishMid = choice.fishPopulationImpact;
+  } else if (typeof choice.fishImpact === 'number') {
+    fishMid = choice.fishImpact;
+  } else if (choice.displayFishPopulation) {
+    const m = String(choice.displayFishPopulation).match(/(-?\d+(\.\d+)?)/);
+    if (m) fishMid = parseFloat(m[0]);
+  }
+
+  if (typeof fishMid === 'number') {
+    numericBias += (Math.max(-100, Math.min(100, fishMid)) / 100) * 0.5;
+  }
+
+  // Clamp numericBias
+  numericBias = Math.max(-1, Math.min(1, numericBias));
+
+  // 3) combine text and numeric biases (favor numeric)
+  const combinedBias = (0.35 * textBias) + (0.65 * numericBias);
+
+  // 4) jitter: deterministic option for tests; otherwise small time-based noise + random noise
+  const timeEntropy = deterministic ? 0 : ((Date.now() % 1000) / 1000 - 0.5) * 0.05; // tiny time nudge
+  const randJitter = deterministic ? 0 : (Math.random() * (jitterRange * 2) - jitterRange);
+
+  let score = combinedBias + timeEntropy + randJitter;
+
+  // ensure final is within -1..1
+  score = Math.max(-1, Math.min(1, score));
+
   return score;
 }
 
@@ -160,8 +200,8 @@ function reefHealthColorChange(score) {
   // 04 >= score <= 6 orange (moderate)
   // score < 04 => red (worsened)
 
-  if (score >= 8) return { color: "2ECC71", label: "Improved" }; // Good
-  if (score <= 3) return { color: "#E43825", label: "Worsened" }; // Severe
+  if (score >= 7) return { color: "13E66B", label: "Improved" }; // Good
+  if (score <= 4) return { color: "#D72512", label: "Worsened" }; // Severe
   return { color: "#F19955", label: "Moderate" }; // Moderate
 }
 
